@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlparse
 from demo import gen_single
 
 HOST = "0.0.0.0"
-PORT = 7860
+PORT = 8015
 
 
 class TTSRequestHandler(BaseHTTPRequestHandler):
