@@ -11,9 +11,8 @@ MODE = 'local'
 tts = IndexTTS(model_dir="checkpoints", cfg_path=os.path.join("checkpoints", "config.yaml"),)
 
 
-def gen_single(prompt, 
+def gen_single(prompt_wav, 
                text, 
-               infer_mode = None, 
                max_text_tokens_per_sentence=120, 
                sentences_bucket_max_size=4,
                save_path = None,
@@ -40,21 +39,12 @@ def gen_single(prompt,
         # "typical_sampling": bool(typical_sampling),
         # "typical_mass": float(typical_mass),
     }
-    if infer_mode is None:
-        output = tts.infer(prompt, text, output_path, verbose=False,
-                           max_text_tokens_per_sentence=int(max_text_tokens_per_sentence),
-                           **kwargs)
-        print("生成完成")
-        if save_path:
-            os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            os.rename(output_path, save_path)
-            print(f"已保存到：{save_path}")
-    else:
-        # 批次推理
-        output = tts.infer_fast(prompt, text, output_path, verbose=False,
-            max_text_tokens_per_sentence=int(max_text_tokens_per_sentence),
-            sentences_bucket_max_size=(sentences_bucket_max_size),
-            **kwargs)
+
+    tts.infer(prompt_wav, text, output_path, verbose=False,
+                        max_text_tokens_per_sentence=int(max_text_tokens_per_sentence),
+                        **kwargs)
+    print("生成完成")
+
 
 
 # ---------------------------------
