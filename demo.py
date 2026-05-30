@@ -18,7 +18,12 @@ def gen_single(prompt_wav,
                save_path = None,
                ):
 
-    output_path = os.path.join("outputs", f"spk_{int(time.time())}.wav")
+    output_path = save_path if save_path else os.path.join("outputs", f"spk_{int(time.time())}.wav")
+    if save_path:
+        output_dir = os.path.dirname(output_path)
+        if output_dir and not os.path.isdir(output_dir):
+            os.makedirs(output_dir, exist_ok=True)
+
     do_sample = True # 是否采样
     top_p = 0.8
     top_k = 30 # 0--100
@@ -44,6 +49,7 @@ def gen_single(prompt_wav,
                         max_text_tokens_per_sentence=int(max_text_tokens_per_sentence),
                         **kwargs)
     print("生成完成")
+    return output_path
 
 
 
