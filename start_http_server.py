@@ -4,7 +4,7 @@ import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlparse
 
-from demo import gen_single
+from demo import MyDemo
 
 HOST = "0.0.0.0"
 PORT = 8015
@@ -21,8 +21,16 @@ class TTSRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlparse(self.path)
+        if parsed.path == "/unload":
+            try:
+                MyDemo.unload()
+                self._send_json(200, {"status": "success", "message": "TTS model unloaded."})
+            except Exception as exc:
+                self._send_json(500, {"error": "internal_error", "message": str(exc)})
+            return
+
         if parsed.path != "/tts":
-            self._send_json(404, {"error": "Not Found", "message": "Use /tts endpoint."})
+            self._send_json(404, {"error": "Not Found", "message": "Use /tts or /unload endpoint."})
             return
 
         params = parse_qs(parsed.query)
@@ -55,7 +63,7 @@ class TTSRequestHandler(BaseHTTPRequestHandler):
                 save_path = os.path.abspath(save_path)
 
         try:
-            output_path = gen_single(prompt_wav, text, save_path=save_path)
+            output_path = MyDemo.gen_single(prompt_wav, text, save_path=save_path)
             self._send_json(200, {
                 "status": "success",
                 "output_path": output_path,

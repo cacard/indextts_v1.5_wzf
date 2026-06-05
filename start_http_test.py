@@ -55,6 +55,6 @@ def main():
         print(f"Request failed: {exc}")
         return 5
 
-
+# .\wzf\python.exe .\start_http_test.py
 if __name__ == "__main__":
     sys.exit(main())

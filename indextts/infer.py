@@ -268,6 +268,28 @@ class IndexTTS:
         except Exception as e:
             pass
 
+    def close(self):
+        """Release model references and clear device caches."""
+        try:
+            self.cache_audio_prompt = None
+            self.cache_cond_mel = None
+            self.gr_progress = None
+            self.normalizer = None
+            self.tokenizer = None
+            self.cfg = None
+            self.gpt = None
+            self.bigvgan = None
+            self.device = None
+            self.dtype = None
+            self.model_version = None
+            self.gpt_path = None
+            self.bigvgan_path = None
+            self.bpe_path = None
+            self.model_dir = None
+        except Exception:
+            pass
+        self.torch_empty_cache()
+
     def _set_gr_progress(self, value, desc):
         if self.gr_progress is not None:
             self.gr_progress(value, desc=desc)
